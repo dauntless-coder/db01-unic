@@ -3,36 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="form.css">
+    <title>Registration Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f3f3;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            margin-top: 15px;
+            background: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .subjects label {
+            font-weight: normal;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
+        <h2>Registration Form</h2>
         <form action="/post" method="post">
-            <h2>Registration Form</h2>
-            <label for="regd_no">Registration Number :</label>
-            <input type="text" id="regd_no" name="regd_no">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-            <label for="branch"> branch</label>
-            <select name="branch" id="branch">
+            <label>Registration Number:</label>
+            <input type="text" name="regd_no" required>
+
+            <label>Name:</label>
+            <input type="text" name="name" required>
+
+            <label>Email:</label>
+            <input type="email" name="email" required>
+
+            <label>Roll:</label>
+            <input type="text" name="roll" required>
+
+            <label>Phone:</label>
+            <input type="tel" name="phone" pattern="[0-9]{10}" required>
+
+            <label>Section:</label>
+            <input type="text" name="section" required>
+
+            <label>Semester:</label>
+            <input type="number" name="semester" min="1" max="8" required>
+
+            <label>Date of Birth:</label>
+            <input type="date" name="dob" required>
+
+            <label>Branch:</label>
+            <select name="branch" id="branch" required>
+                <option value="">Select Branch</option>
                 <option value="CSE">CSE</option>
                 <option value="ECE">ECE</option>
                 <option value="EEE">EEE</option>
                 <option value="MECH">MECH</option>
                 <option value="CIVIL">CIVIL</option>
                 <option value="Biotechnology">Biotechnology</option>
-            
             </select>
+
+            <label>Subjects:</label>
+            <div class="subjects" id="subjects-container">
+                <!-- Will be filled dynamically -->
+            </div>
+
             <button type="submit">Submit</button>
-
-            
-
-          
         </form>
     </div>
+
+<script>
+    const branchSelect = document.getElementById('branch');
+    const subjectsContainer = document.getElementById('subjects-container');
+
+    const subjectsData = {
+        CSE: [
+            { code: "JAVA101", name: "Java" },
+            { code: "AI101", name: "AI" }
+        ],
+        Biotechnology: [
+            { code: "GEN101", name: "Genetics" },
+            { code: "MIC101", name: "Microbiology" }
+        ]
+    };
+
+    branchSelect.addEventListener('change', function () {
+        const selectedBranch = this.value;
+        subjectsContainer.innerHTML = ''; // Clear old subjects
+
+        if (subjectsData[selectedBranch]) {
+            subjectsData[selectedBranch].forEach(subject => {
+                const label = document.createElement('label');
+                label.innerHTML = `
+                    <input type="checkbox" name="subjects[]" 
+                        value="${encodeURIComponent(JSON.stringify(subject))}">
+                    ${subject.code} - ${subject.name}
+                `;
+                subjectsContainer.appendChild(label);
+            });
+        }
+    });
+</script>
 
 </body>
 </html>
